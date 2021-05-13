@@ -1,5 +1,6 @@
 ﻿using FaceId.Dto;
 using FaceId.Infrastructure;
+using FaceId.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ namespace FaceId.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class FaceController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<FaceController> _logger;
         private readonly IFaceService _faceService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IFaceService faceService)
+        public FaceController(ILogger<FaceController> logger, IFaceService faceService)
         {
             _faceService = faceService;
             _logger = logger;
@@ -23,7 +24,6 @@ namespace FaceId.Controllers
         public async Task<IActionResult> TrainPersonGroup([FromBody] UserInformationDto userInformation)
         {
             await _faceService.TrainPersonGroupAsync(userInformation.RegisterUserPhotoUrl, userInformation.Email);
-
             return Ok();
         }
 
@@ -31,7 +31,14 @@ namespace FaceId.Controllers
         public async Task<IActionResult> ValidateFaceIdentity([FromBody] ValidateUserDto userDto)
         {
             var validation = await _faceService.ValidatePerson(userDto.Url);
-            return Ok(validation);
+            if (validation)
+            {
+                return Ok(validation);
+            }
+            else
+            {
+                return Unauthorized("Usuario no autorizado");   
+            }
         }
     }
 }

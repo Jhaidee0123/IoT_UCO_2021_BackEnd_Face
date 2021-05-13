@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.CognitiveServices.Vision.Face;
+﻿using FaceId.Infrastructure.Exceptions;
+using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ namespace FaceId.Infrastructure
 {
     public class FaceService : IFaceService
     {
-        const string SubscriptionKey = "";
-        const string Endpoint = "";
+        const string SubscriptionKey = "ed283cc7beaf4f80aae468793dfcaf93";
+        const string Endpoint = "https://digitalgrading-cognitiveface.cognitiveservices.azure.com/";
         const string Model = RecognitionModel.Recognition03;
         const string PersonGroupId = "users";
 
